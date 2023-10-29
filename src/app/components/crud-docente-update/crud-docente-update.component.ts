@@ -14,8 +14,81 @@ import Swal from 'sweetalert2'
 })
 export class CrudDocenteUpdateComponent {
 
+  //Para el ubigeo
+  departamentos: string[] = [];
+  provincias: string[] = [];
+  distritos: Ubigeo[] = [];
 
-  
+    //Json para registrar o actualizar
+    docente: Docente = { 
+        idDocente:0,
+        nombre:"",
+        dni:"",
+        estado:1,
+        ubigeo:{
+          idUbigeo: -1,
+          departamento:"-1",
+          provincia:"-1",
+          distrito:"-1",
+      }
+    };
+
+    constructor( 
+                  private ubigeoService : UbigeoService,
+                  private docenteService: DocenteService,
+                  @Inject(MAT_DIALOG_DATA) public data: any
+              ){
+                this.docente = data;
+                console.log(">>> idDocente >> " + this.docente.idDocente);
+                console.log(">>> nombre >>  " + this.docente.nombre);
+                console.log(">>> dni >>  " + this.docente.dni);
+                console.log(">>> estado >>  " + this.docente.estado);
+                console.log(">>> idUbigeo >>  " + this.docente.ubigeo?.idUbigeo);
+                console.log(">>> departamento >>  " + this.docente.ubigeo?.departamento);
+                console.log(">>> provincia >>  " + this.docente.ubigeo?.provincia);
+                console.log(">>> distrito >>  " + this.docente.ubigeo?.distrito);
+                             
+               
+                this.ubigeoService.listarDepartamento().subscribe(
+                  x => this.departamentos = x
+                );
+                this.ubigeoService.listaProvincias(this.docente.ubigeo?.departamento).subscribe(
+                  response =>  this.provincias= response
+                );
+                this.ubigeoService.listaDistritos(this.docente.ubigeo?.departamento, this.docente.ubigeo?.provincia).subscribe(
+                  response =>  this.distritos= response
+                );   
 
 
+    }
+
+   cargaProvincia(){
+            console.log(">>> departamento >>> "  + this.docente.ubigeo?.departamento);
+
+            this.ubigeoService.listaProvincias(this.docente.ubigeo?.departamento).subscribe(
+                x => this.provincias = x
+            );
+
+            this.distritos = [];
+            this.docente.ubigeo!.idUbigeo = -1;
+            this.docente.ubigeo!.provincia = "-1";
+  }
+
+   cargaDistrito(){
+          console.log(">>> departamento >>> "  + this.docente.ubigeo?.departamento);
+          console.log(">>> provincia >>> "  + this.docente.ubigeo?.provincia);
+
+          this.ubigeoService.listaDistritos(this.docente.ubigeo?.departamento, this.docente.ubigeo?.provincia).subscribe(
+              x => this.distritos = x
+          );
+
+          this.docente.ubigeo!.idUbigeo = -1;
+
+   }
+
+   actualiza(){
+          this.docenteService.actualiza(this.docente).subscribe(
+              x =>  Swal.fire('Mensaje', x.mensaje, 'info')
+          );
+   }
 }
