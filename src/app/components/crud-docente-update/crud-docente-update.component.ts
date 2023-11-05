@@ -97,6 +97,9 @@ export class CrudDocenteUpdateComponent {
    }
 
    actualiza(){
+          //Descomentar Para la PC2
+          //this.docente.usuarioActualiza = this.objUsuario;
+
           this.docenteService.actualiza(this.docente).subscribe(
               x =>  Swal.fire('Mensaje', x.mensaje, 'info')
           );

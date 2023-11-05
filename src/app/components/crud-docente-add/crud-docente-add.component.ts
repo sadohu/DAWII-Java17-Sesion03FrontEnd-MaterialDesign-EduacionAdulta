@@ -76,6 +76,10 @@ export class CrudDocenteAddComponent {
   }
 
   registra(){
+      //Descomentar Para la PC2
+      //this.docente.usuarioActualiza = this.objUsuario;
+      //this.docente.usuarioRegistro = this.objUsuario;
+
       this.docenteService.inserta(this.docente).subscribe(
             x => {
                   Swal.fire('Mensaje', x.mensaje, 'info'); 
