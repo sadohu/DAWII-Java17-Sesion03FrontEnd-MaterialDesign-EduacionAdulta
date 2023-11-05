@@ -19,8 +19,17 @@ export class CrudDocenteAddComponent {
   provincias: string[] = [];
   distritos: Ubigeo[] = [];
 
-    //Json para registrar o actualizar
-    docente: Docente = { 
+  //declaracion de las validaciones
+  formsRegistra = this.formBuilder.group({ 
+      validaNombre: ['', [Validators.required, Validators.pattern('[a-zA-Zá-úÁ-ÚñÑ ]{3,30}')]] , 
+      validaDNI: ['', [Validators.required, Validators.pattern('[0-9]{8}')] ] , 
+      validaDepartamento: ['', Validators.min(1)] , 
+      validaProvincia: ['', Validators.min(1)] , 
+      validaDistrito: ['', Validators.min(1)] , 
+  });
+
+  //Json para registrar o actualizar
+  docente: Docente = { 
         idDocente:0,
         nombre:"",
         dni:"",
@@ -35,7 +44,8 @@ export class CrudDocenteAddComponent {
 
 
   constructor( private ubigeoService : UbigeoService,
-               private docenteService: DocenteService){
+               private docenteService: DocenteService,
+               private formBuilder : FormBuilder){
       this.ubigeoService.listarDepartamento().subscribe(
               x => this.departamentos = x
       );

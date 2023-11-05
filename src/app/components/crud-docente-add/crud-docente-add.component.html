@@ -1,5 +1,5 @@
 <div class="container">
-    <form  class="mat-dialog-content"  id="idFormModalidad"  >
+    <form  class="mat-dialog-content"  id="idFormModalidad" [formGroup]="formsRegistra" >
       <div class="row">
             <mat-toolbar color="primary" >    
               <span>Registra Docente</span>    
@@ -8,48 +8,79 @@
       <div  class="row"  style="margin-top: 3%">
                 <mat-form-field class="col-md-8">
                     <mat-label>Nombre</mat-label>
-                    <input  matInput  [(ngModel)]="docente.nombre"  name="nombre" >
-                   
+                    <input  matInput  [(ngModel)]="docente.nombre"  name="nombre" 
+                            formControlName="validaNombre" maxlength="30">   
+                    <mat-hint style="color: red" *ngIf="formsRegistra.controls.validaNombre.touched">
+                        <span *ngIf="formsRegistra.controls.validaNombre.hasError('required')">
+                               El nombre es requerido 
+                        </span>
+                        <span *ngIf="formsRegistra.controls.validaNombre.hasError('pattern')">
+                               El nombre es de 3 a 30 caracteres 
+                        </span>
+                    </mat-hint> 
                 </mat-form-field>
                 <mat-form-field class="col-md-4">
                     <mat-label>DNI</mat-label>
-                    <input  matInput  [(ngModel)]="docente.dni"   name="dni" >
-                    
+                    <input  matInput  [(ngModel)]="docente.dni"   name="dni" formControlName="validaDNI" maxlength="8">  
+                    <mat-hint style="color: red" *ngIf="formsRegistra.controls.validaDNI.touched">
+                        <span *ngIf="formsRegistra.controls.validaDNI.hasError('required')">
+                               El DNI es requerido 
+                        </span>
+                        <span *ngIf="formsRegistra.controls.validaDNI.hasError('pattern')">
+                               El DNI tiene 8 dígitos
+                        </span>
+                    </mat-hint>
                 </mat-form-field>
         </div>
         <div class="row" style="margin-top: 5%">
     
             <mat-form-field class="col-md-4">
                 <mat-label>Departamento</mat-label>
-                <mat-select  name="departamento"  [(ngModel)]="docente.ubigeo!.departamento"  (selectionChange)="cargaProvincia()">
+                <mat-select  name="departamento"  [(ngModel)]="docente.ubigeo!.departamento"  
+                    (selectionChange)="cargaProvincia()"   formControlName="validaDepartamento" >
                     <mat-option value="-1"> [Seleccione] </mat-option>
                     <mat-option *ngFor="let x of departamentos"  [value]="x">
                                     {{x}}
                     </mat-option> 
                 </mat-select>
-                  
+                <mat-hint style="color: red" *ngIf="formsRegistra.controls.validaDepartamento.touched">
+                    <span *ngIf="formsRegistra.controls.validaDepartamento.hasError('min')">
+                           El Departamento es requerido
+                    </span>
+                </mat-hint>  
             </mat-form-field> 
 
 
             <mat-form-field class="col-md-4">
                 <mat-label>Provincia</mat-label>
-                <mat-select   name="provincia"  [(ngModel)]="docente.ubigeo!.provincia" (selectionChange)="cargaDistrito()">
+                <mat-select   name="provincia"  [(ngModel)]="docente.ubigeo!.provincia" 
+                    (selectionChange)="cargaDistrito()" formControlName="validaProvincia" >
                     <mat-option value="-1"> [Seleccione] </mat-option>
                     <mat-option *ngFor="let x of provincias"  [value]="x">
                         {{x}}
                     </mat-option> 
                 </mat-select>
-                 
+                <mat-hint style="color: red" *ngIf="formsRegistra.controls.validaProvincia.touched">
+                    <span *ngIf="formsRegistra.controls.validaProvincia.hasError('min')">
+                           La provincia es requerida
+                    </span>
+                </mat-hint>  
             </mat-form-field> 
 
             <mat-form-field class="col-md-4">
                 <mat-label>Distrito</mat-label>
-                <mat-select  name="distrito"  [(ngModel)]="docente.ubigeo!.idUbigeo" >
+                <mat-select  name="distrito"  [(ngModel)]="docente.ubigeo!.idUbigeo" 
+                                    formControlName="validaDistrito" >
                     <mat-option value="-1"> [Seleccione] </mat-option>
                     <mat-option *ngFor="let x of distritos"  [value]="x.idUbigeo">
                         {{x.distrito}}
                     </mat-option> 
                 </mat-select>
+                <mat-hint style="color: red" *ngIf="formsRegistra.controls.validaDistrito.touched">
+                    <span *ngIf="formsRegistra.controls.validaDistrito.hasError('min')">
+                           El distrito es requerido
+                    </span>
+                </mat-hint>  
              
             </mat-form-field> 
 
@@ -60,6 +91,7 @@
                         type="submit" 
                         (click) = "registra()"
                         color="primary" 
+                        [disabled]="formsRegistra.invalid"
                         [mat-dialog-close]="1">
                         Registra
                 </button>
