@@ -32,6 +32,29 @@ export class ConsultaDocenteComponent {
   selProvincia: string = "-1";
   selDistrito: number = -1;
 
-  
+  constructor(
+    private ubigeoService: UbigeoService,
+    private docenteService: DocenteService
+  ) {
+    this.ubigeoService.listarDepartamento().subscribe(
+      x => this.departamentos = x
+    );
+  }
+
+  cargaProvincia() {
+    this.ubigeoService.listaProvincias(this.selDepartamento).subscribe(
+      response => this.provincias = response
+    );
+    this.distritos = [];
+    this.selDistrito = -1;
+    this.selProvincia = "-1";
+  }
+
+  cargaDistrito() {
+    this.ubigeoService.listaDistritos(this.selDepartamento, this.selProvincia).subscribe(
+      response => this.distritos = response
+    );
+    this.selDistrito = -1;
+  }
 
 }
