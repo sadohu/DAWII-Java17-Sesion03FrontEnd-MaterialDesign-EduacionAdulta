@@ -1,5 +1,7 @@
 import { Component, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
+import { MatTableDataSource } from '@angular/material/table';
+import { Docente } from 'src/app/models/docente.model';
 import { Ubigeo } from 'src/app/models/ubigeo.model';
 import { DocenteService } from 'src/app/services/docente.service';
 import { UbigeoService } from 'src/app/services/ubigeo.service';
@@ -57,4 +59,17 @@ export class ConsultaDocenteComponent {
     this.selDistrito = -1;
   }
 
+  consulta(){
+    console.log("nombre", this.nombre);
+    console.log("dni", this.dni);
+    console.log("estado", this.estado);
+    console.log("selDistrito", this.selDistrito);
+    
+    this.docenteService.consulta(this.nombre, this.dni, this.estado ? 1 : 0, this.selDistrito).subscribe(
+      response => {
+        this.dataSource = new MatTableDataSource<Docente>(response);
+        this.dataSource.paginator = this.paginator;
+      }
+    );
+  }
 }
