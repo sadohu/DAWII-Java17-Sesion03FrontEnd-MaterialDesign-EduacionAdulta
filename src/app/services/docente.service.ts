@@ -36,7 +36,7 @@ export class DocenteService {
       .set("estado", estado)
       .set("idUbigeo", idUbigeo);
 
-    return this.http.get<Docente[]>(baseUrlConsulta + "/consultaDocentePorParametros" + { params });
+    return this.http.get<Docente[]>(baseUrlConsulta + "/consultaDocentePorParametros", { params });
   }
 
 }
