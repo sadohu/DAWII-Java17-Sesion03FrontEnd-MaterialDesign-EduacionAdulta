@@ -63,4 +63,27 @@ export class DocenteService {
     }));
   }
 
+  generateDocumentExcel(nombre: string,
+    dni: string,
+    estado: number,
+    idUbigeo: number): Observable<any> {
+
+    const params = new HttpParams()
+      .set("nombre", nombre)
+      .set("dni", dni)
+      .set("estado", estado)
+      .set("idUbigeo", idUbigeo);
+
+    let headers = new HttpHeaders();
+    headers.append('Accept', 'application/vnd.ms-excel');
+    let requestOptions: any = { headers: headers, responseType: 'blob' };
+
+    return this.http.post(baseUrlConsulta + "/reporteDocenteExcel?nombre=" + nombre + "&dni=" + dni + "&estado=" + estado + "&idUbigeo=" + idUbigeo, '', requestOptions).pipe(map((response) => {
+      return {
+        filename: 'ReporteDocentes.xlsx',
+        data: new Blob([response], { type: 'application/vnd.ms-excel' })
+      };
+    }));
+  }
+
 }
