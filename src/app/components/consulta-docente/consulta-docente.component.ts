@@ -59,17 +59,34 @@ export class ConsultaDocenteComponent {
     this.selDistrito = -1;
   }
 
-  consulta(){
+  consulta() {
     console.log("nombre", this.nombre);
     console.log("dni", this.dni);
     console.log("estado", this.estado);
     console.log("selDistrito", this.selDistrito);
-    
+
     this.docenteService.consulta(this.nombre, this.dni, this.estado ? 1 : 0, this.selDistrito).subscribe(
       response => {
         this.dataSource = new MatTableDataSource<Docente>(response);
         this.dataSource.paginator = this.paginator;
       }
     );
+  }
+
+  exportarPDF() {
+    this.docenteService.generateDocumentReport(this.nombre, this.dni, this.estado ? 1 : 0, this.selDistrito).subscribe(
+      response => {
+        console.log(response);
+        var url = window.URL.createObjectURL(response.data);
+        var a = document.createElement('a');
+        document.body.appendChild(a);
+        a.setAttribute('style', 'display: none');
+        a.setAttribute('target', 'blank');
+        a.href = url;
+        a.download = response.filename;
+        a.click();
+        window.URL.revokeObjectURL(url);
+        a.remove();
+      });
   }
 }

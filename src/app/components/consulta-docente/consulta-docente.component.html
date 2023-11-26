@@ -18,6 +18,7 @@
         <mat-checkbox class="example-margin" checked class="col-3" [(ngModel)]="estado">Estado</mat-checkbox>
 
         <button mat-raised-button type="submit" color="primary" (click)="consulta()">Filtrar</button>
+        <button mat-raised-button type="submit" color="warn" (click)="exportarPDF()">PDF</button>
 
     </div>
 
@@ -88,7 +89,7 @@
             </mat-table>
 
             <mat-paginator [pageSizeOptions]="[2, 4, 6]" showFirstLastButtons></mat-paginator>
-            
+
         </div>
     </div>
 </div>
